@@ -1,3 +1,5 @@
+import torch
+
 class Tokenizer(object):
     """
     Tokenizer constructor from provided vocabulary.
@@ -19,7 +21,7 @@ class Tokenizer(object):
         self.str_to_int = {c:i for i,c in enumerate(vocab)}
         self.int_to_str = {i:c for i,c in enumerate(vocab)}
 
-    def encode(self, strs: list[str]) -> list[int]:
+    def encode(self, strs: list[str], return_tensors: bool = False) -> list[int]:
         """
         Encode a list of strings into a list of tokens.
         
@@ -27,12 +29,17 @@ class Tokenizer(object):
         ----
             strs: list[str]
                 List of strings
+            return_tensors: bool = False
+                Option to return list of integers as tensors
         Return
         ------
             list[int]:
                 List of encoded strings
         """
-        return [self.str_to_int[c] for c in strs]
+        tokens = [self.str_to_int[c] for c in strs]
+        if return_tensors:
+            return torch.tensor(tokens, dtype=torch.long)
+        return tokens
 
     def decode(self, tokens: list[int]) -> list[str]:
         """
