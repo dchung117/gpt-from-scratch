@@ -5,6 +5,13 @@ from torch.utils.data import Dataset
 class BigramDataset(Dataset):
     """
     Constructor for building a bigram torch Dataset.
+    
+    Attributes
+    ----------
+    doc_tokens: Iterable[int]
+        Tokenized document to use for training LLM.
+    block_size: int = 8
+        Number of consecutive tokens per example.
     """
     def __init__(self, doc_tokens: Iterable[int], block_size: int = 8) -> None:
         super().__init__()
