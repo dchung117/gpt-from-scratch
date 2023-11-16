@@ -20,3 +20,34 @@ def bigram_crossentropy_loss(preds: torch.Tensor, tgts: torch.Tensor) -> torch.T
     preds = preds.reshape(-1, vocab_size)
     tgts = tgts.reshape(-1)
     return F.cross_entropy(preds, tgts)
+
+def train_step(model: torch.nn.Module,
+    inputs: torch.Tensor,
+    targets: torch.Tensor,
+    optimizer: torch.optim.Optimizer
+    ) -> None:
+    """
+    Executes a single training step
+
+    Args
+    ----
+        model: torch.nn.Module
+            Large language model to be trained.
+        inputs: torch.Tensor
+            Input tokens for training (shape: (B, T, vocab_size)).
+        targets: torch.Tensor
+            Target tokens for training (shape: (B, T, vocab_size)).
+        optimizer: torch.optim.Optimizer
+            Optimization algorithm for training.
+    Returns
+    -------
+        None
+    """
+    model.train()
+    logits = model(inputs)
+
+    optimizer.zero_grad()
+    loss = bigram_crossentropy_loss(logits, targets)
+    loss.backward()
+    optimizer.step()
+    print("Loss: ", loss.item())
