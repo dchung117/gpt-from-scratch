@@ -41,7 +41,8 @@ def train_step(model: torch.nn.Module,
             Optimization algorithm for training.
     Returns
     -------
-        None
+        float:
+            Training loss over the training batch
     """
     model.train()
     logits = model(inputs)
@@ -50,4 +51,5 @@ def train_step(model: torch.nn.Module,
     loss = bigram_crossentropy_loss(logits, targets)
     loss.backward()
     optimizer.step()
-    print("Loss: ", loss.item())
+
+    return loss.item()
