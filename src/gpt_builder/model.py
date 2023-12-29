@@ -56,9 +56,9 @@ class GPTLanguageModel(nn.Module):
         Number of tokens in vocabulary
     block_size: int
         Number of tokens per example
-    d_embed: int (def. 64)
+    d_embed: int (def. 384)
         Dimensionality of embeddings
     """
-    def __init__(self, vocab_size: int, block_size: int, d_embed: int = 64) -> None:
+    def __init__(self, vocab_size: int, block_size: int, d_embed: int = 384) -> None:
         self.token_embedding = nn.Embedding(vocab_size, d_embed)
         self.pos_embedding = nn.Embedding(block_size, d_embed)
