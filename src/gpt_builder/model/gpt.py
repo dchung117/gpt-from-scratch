@@ -67,6 +67,8 @@ class DecoderBlock(nn.Module):
     """
     Decoder block for GPT language model.
 
+    Decoder block applies a multi-headed attention module, followed by a feed foward module on the input token embeddings.
+
     Args
     ----
         d_embed: int
@@ -99,6 +101,8 @@ class MultiHeadAttention(nn.Module):
     """
     Multi-headed attention module
     
+    This module applies multiple self-attention heads to the input token embedding sequence.
+
     Args
     ----
         n_heads: int
@@ -131,6 +135,8 @@ class MultiHeadAttention(nn.Module):
 class AttentionHead(nn.Module):
     """
     Attention head module for GPT LLM
+
+    Applies one pass of self-attention to the input token sequence.
 
     Args
     ----
@@ -169,7 +175,8 @@ class FeedForward(nn.Module):
     """
     Feedforward GPT LLM module
 
-    
+    Applied after the multi-headed attention module.
+
     Args
     ----
         d_embed: int
