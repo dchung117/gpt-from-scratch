@@ -14,7 +14,7 @@ class GPTLanguageModel(nn.Module):
         Number of tokens per example
     n_decoders: int (def. 4)
         Number of decoder modules
-    n_heads: int (def. 8)
+    n_heads: int (def. 4)
         Number of attention heads per decoder
     d_embed: int (def. 384)
         Dimensionality of embeddings
@@ -22,7 +22,7 @@ class GPTLanguageModel(nn.Module):
         Dropout hyperparameter
     """
     def __init__(self, vocab_size: int, block_size: int,
-        n_decoders: int = 4, n_heads: int = 8, d_embed: int = 38, p_dropout: float = 0.2) -> None:
+        n_decoders: int = 4, n_heads: int = 4, d_embed: int = 38, p_dropout: float = 0.2) -> None:
         super().__init__()
         self.block_size = block_size
         self.token_embedding = nn.Embedding(vocab_size, d_embed)
