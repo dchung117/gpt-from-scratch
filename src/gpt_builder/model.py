@@ -74,6 +74,26 @@ class GPTLanguageModel(nn.Module):
         self.layer_norm = nn.LayerNorm(d_embed)
         self.head = nn.Linear(d_embed, vocab_size)
 
+        self.apply(self.__init_wts)
+
+    def __init_wts(self, module: nn.Module) -> None:
+        """
+        Initializes submodule weights.
+
+        Args
+        ----
+            module: nn.Module
+                Module whose weights are initialized
+        Return
+        ------
+            None
+        """
+        if isinstance(module, nn.Linear):
+            torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
+            if module.bias is not None:
+                torch.nn.init.zeros_(module.bias)
+        elif isinstance(module, nn.Embedding):
+            torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
     def forward(self, idxs: torch.Tensor, tgts: torch.Tensor | None) -> torch.Tensor:
         x_tokens = self.token_embedding(idxs)  # (B, T, d_embed)
         x_pos = self.pos_embedding(torch.arange(self.block_size, device=x_tokens.device))  # (T, d_embed)
