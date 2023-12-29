@@ -56,9 +56,25 @@ class GPTLanguageModel(nn.Module):
         Number of tokens in vocabulary
     block_size: int
         Number of tokens per example
+    n_decoders: int (def. 4)
+        Number of decoder modules
+    n_heads: int (def. 8)
+        Number of attention heads per decoder
     d_embed: int (def. 384)
         Dimensionality of embeddings
     """
-    def __init__(self, vocab_size: int, block_size: int, d_embed: int = 384) -> None:
+    def __init__(self, vocab_size: int, block_size: int,
+        n_decoders: int = 4, n_heads: int = 8, d_embed: int = 384) -> None:
         self.token_embedding = nn.Embedding(vocab_size, d_embed)
         self.pos_embedding = nn.Embedding(block_size, d_embed)
+        self.decoders = nn.Sequential(
+            *[DecoderBlock(d_embed, n_heads) for _ in range(n_decoders)]
+        )
+        self.layer_norm = nn.LayerNorm(d_embed)
+        self.head = nn.Linear(d_embed, vocab_size)
+
+class DecoderBlock(nn.Module):
+    """
+    Decoder block for GPT language model.
+    """
+    pass
