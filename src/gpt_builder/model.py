@@ -142,5 +142,23 @@ class MultiHeadAttention(nn.Module):
 class FeedForward(nn.Module):
     """
     Feedforward GPT LLM module
+
+    
+    Args
+    ----
+        d_embed: int
+            Dimensionality of embeddings
+        p_dropout: float (def. 0.2)
+            Dropout hyperparameter
     """
-    pass
+    def __init__(self, d_embed: int, p_dropout: float = 0.2) -> None:
+        super().__init__()
+        self.ff = nn.Sequential(
+            nn.Linear(d_embed, 4*d_embed),
+            nn.ReLU(),
+            nn.Linear(4*d_embed, d_embed),
+            nn.Dropout(p=p_dropout),
+        )
+    
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.ff(x)
