@@ -45,3 +45,20 @@ class BigramLLM(nn.Module):
             x = torch.cat((x, x_next), dim=1)
 
         return x
+
+class GPTLanguageModel(nn.Module):
+    """
+    Decoder-only large language model.
+
+    Args
+    ----
+    vocab_size: int
+        Number of tokens in vocabulary
+    block_size: int
+        Number of tokens per example
+    d_embed: int (def. 64)
+        Dimensionality of embeddings
+    """
+    def __init__(self, vocab_size: int, block_size: int, d_embed: int = 64) -> None:
+        self.token_embedding = nn.Embedding(vocab_size, d_embed)
+        self.pos_embedding = nn.Embedding(block_size, d_embed)
