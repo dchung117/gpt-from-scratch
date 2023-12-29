@@ -65,6 +65,7 @@ class GPTLanguageModel(nn.Module):
     """
     def __init__(self, vocab_size: int, block_size: int,
         n_decoders: int = 4, n_heads: int = 8, d_embed: int = 384) -> None:
+        self.block_size = block_size
         self.token_embedding = nn.Embedding(vocab_size, d_embed)
         self.pos_embedding = nn.Embedding(block_size, d_embed)
         self.decoders = nn.Sequential(
@@ -72,6 +73,15 @@ class GPTLanguageModel(nn.Module):
         )
         self.layer_norm = nn.LayerNorm(d_embed)
         self.head = nn.Linear(d_embed, vocab_size)
+
+    def forward(self, idxs: torch.Tensor, tgts: torch.Tensor | None) -> torch.Tensor:
+        x_tokens = self.token_embedding(idxs)  # (B, T, d_embed)
+        x_pos = self.pos_embedding(torch.arange(self.block_size, device=x_tokens.device))  # (T, d_embed)
+    
+        x = x_tokens + x_pos  # (B, T, d_embed)
+        x = self.decoders(x)  # (B, T, d_embed)
+        x = self.layer_norm(x)  # (B, T, d_embed)
+        return self.head(x)  # (B, T, vocab_size)
 
 class DecoderBlock(nn.Module):
     """
