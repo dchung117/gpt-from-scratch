@@ -156,6 +156,13 @@ class MultiHeadAttention(nn.Module):
         self.ff = nn.Linear(n_heads * d_head, d_embed)
         self.dropout = nn.Dropout(p=p_dropout)
 
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = torch.cat(
+            [h(x) for h in self.heads], dim=-1  # (B, T, n_heads * d_head)
+        )
+        x = self.ff(x)
+        return self.dropout(x)
+
 class AttentionHead(nn.Module):
     """
     Attention head module for GPT LLM
