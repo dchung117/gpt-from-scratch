@@ -119,7 +119,7 @@ class DecoderBlock(nn.Module):
     def __init__(self, d_embed: int, n_heads: int) -> None:
         super().__init__()
         d_head = d_embed // n_heads   # dimensionality for each head
-        self.attn = MultiHeadAttention(n_heads, d_head)
+        self.attn = MultiHeadAttention(n_heads, d_head, d_embed)
         self.ff = FeedForward(d_embed)
         self.layer_norm_1 = nn.LayerNorm(d_embed)
         self.layer_norm_2 = nn.LayerNorm(d_embed)
@@ -136,6 +136,29 @@ class DecoderBlock(nn.Module):
 class MultiHeadAttention(nn.Module):
     """
     Multi-headed attention module
+    
+    Args
+    ----
+        n_heads: int
+            Number of attention heads
+        d_head: int
+            Dimensionality of each attention head
+        d_embed: int
+            Dimensionality of embedding
+        p_dropout: float (def. 0.2)
+            Dropout hyperparameter
+    """
+    def __init__(self, n_heads: int, d_head: int, d_embed: int, p_dropout: float = 0.2) -> None:
+        super().__init__()
+        self.heads = nn.ModuleList(
+            [AttentionHead(d_head) for _ in range(n_heads)]
+        )
+        self.ff = nn.Linear(n_heads * d_head, d_embed)
+        self.dropout = nn.Dropout(p=p_dropout)
+
+class AttentionHead(nn.Module):
+    """
+    Attention head module for GPT LLM
     """
     pass
 
