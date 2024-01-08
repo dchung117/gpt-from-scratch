@@ -54,7 +54,7 @@ class GPTLanguageModel(nn.Module):
         elif isinstance(module, nn.Embedding):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
 
-    def forward(self, idxs: torch.Tensor, tgts: torch.Tensor | None) -> torch.Tensor:
+    def forward(self, idxs: torch.Tensor) -> torch.Tensor:
         x_tokens = self.token_embedding(idxs)  # (B, T, d_embed)
         x_pos = self.pos_embedding(torch.arange(self.block_size, device=x_tokens.device))  # (T, d_embed)
     
