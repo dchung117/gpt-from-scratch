@@ -9,7 +9,7 @@ bash Anaconda3*.sh
 
 echo "Installed Anaconda; run 'source ~/.bashrc; conda env create -f environment.yml' to complete setup."
 echo "Make sure to update git config --global user.name and user.email."
-echo "To train GPT, download the OpenWebText dataset and move it to the './data' subdirectory."
+echo "To train GPT, download and extract the OpenWebText dataset into the './data' subdirectory."
 
 # Delete install scripts
 rm Anaconda3*.sh
